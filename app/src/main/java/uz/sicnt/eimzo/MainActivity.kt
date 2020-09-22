@@ -18,36 +18,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        createButton.setOnClickListener {
-            horcrux.createPKCS7(this, "MESSAGE")
-        }
+   		// Bu metod ma'lumotlarni sign qilish uchun ishlatiladi Message ga jo'natilsihi kerak bo'lgan ma'lumot jo'natiladi
+        horcrux.createPKCS7(this, "MESSAGE")
 
-        checkButton.setOnClickListener {
-            //  Check if users is Legal             horcrux.isLegal()
-            //  Check if users is Individual        horcrux.isIndividual()
-            //  Get user tin                        horcrux.getTin()
-            //  Get encoded message                 horcrux.getPKCS()
-            //  Get serial number                   horcrux.getSerialNumber()
-            //  Get subject name                    horcrux.getSubjectName()
-            Log.e(horcrux.tag, horcrux.getTin())
-        }
-
-        appendButton.setOnClickListener {
-            //  С пользовательскими параметрами
-            //  horcrux.appendPkcs7(this, horcrux.getPKCS(), horcrux.getSerialNumber())
-            //  horcrux.appendPkcs7(this, horcrux.getPKCS()) With custom params
-
-            horcrux.appendPkcs7(this)   //  С параметрами по умолчанию
-        }
-
-        attachButton.setOnClickListener {
-            val timestamp = "Ваш  таймстамп"
-            //  С пользовательскими параметрами
-            //  horcrux.attachPkcs7(this, horcrux.getPKCS(), timestamp)
-            //  horcrux.attachPkcs7(this, horcrux.getPKCS(), horcrux.getSerialNumber(),timestamp)
-
-            horcrux.attachPkcs7(this, timestamp)    //  С параметрами по умолчанию
-        }
+        
+    	// Bu metod oldin hashlangan ma'lumotga qo'shimcha sign qilish uchun ishlatiladi, HASH bu kelayotgan ma'lumot
+        horcrux.appendPkcs7(this, "HASH")
+        
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -57,6 +34,17 @@ class MainActivity : AppCompatActivity() {
             else -> onAttached(resultCode, data)
         }
         super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private fun attachTimeStampToPkcs7() {
+        TODO("Вызовите метод для добавки таймстамп")
+
+        val signatureHex = horcrux.getSignatureHex()
+        // https://edo.uzcardtrade.uz/api/factura/timestamp?signatureHex={signatureHex}
+        // bu url get metod orqali request jo'natiladi, kelgan  response'dan data key'lik qismini ma'lumotini olib timestamp biriktiriladi
+        val timestamp = "Ваш  таймстамп"
+
+        horcrux.attachPkcs7(this, horcrux.getSerialNumber(), timestamp, horcrux.getSubjectName())
     }
 
     private fun onCreate(
@@ -100,12 +88,6 @@ class MainActivity : AppCompatActivity() {
             else -> return
         }
 
-    }
-
-    private fun attachTimeStampToPkcs7() {
-        TODO("Вызовите метод для добавки таймстамп")
-        //  val timestamp = "Ваш  таймстамп"
-        //  horcrux.attachPkcs7(this, horcrux.getSerialNumber(), timestamp, horcrux.getSubjectName())
     }
 
     private fun onAttached(resultCode: Int, data: Intent?) {

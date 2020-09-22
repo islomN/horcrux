@@ -253,6 +253,10 @@ class Horcrux(private val context: Context, private val apiKey: String) : Activi
         return readString(EXTRA_RESULT_SUBJECT_NAME)
     }
 
+    fun getSignatureHex(): String {
+        return readString(EXTRA_RESULT_SIGNATURE)
+    }
+
     /**
      * @return Check if E-imzo app installed
      */
