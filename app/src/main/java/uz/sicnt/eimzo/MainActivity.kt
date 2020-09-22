@@ -37,8 +37,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun attachTimeStampToPkcs7() {
-        TODO("Вызовите метод для добавки таймстамп")
-
         val signatureHex = horcrux.getSignatureHex()
         // https://edo.uzcardtrade.uz/api/factura/timestamp?signatureHex={signatureHex}
         // bu url get metod orqali request jo'natiladi, kelgan  response'dan data key'lik qismini ma'lumotini olib timestamp biriktiriladi
@@ -61,6 +59,9 @@ class MainActivity : AppCompatActivity() {
                 //  Здесь вы можете соответствующим образом проанализировать данные (используя этот RegEx `horcrux.regex`). Проверьте res / strings для определения регулярных выражений
                 //  Вы можете использовать данные, как вы хотите. Но для использования методов horcrux вы ДОЛЖНЫ вызывать `parsePFX (data)`
                 horcrux.parsePFX(data)
+
+                //  Timestamp call
+                attachTimeStampToPkcs7()
                 return
             }
             RESULT_ERROR -> return
@@ -103,6 +104,7 @@ class MainActivity : AppCompatActivity() {
                 val pkcsString = Base64.encodeToString(pkcs, Base64.NO_WRAP)    //  String
 
                 // shu yerdagi pkcsString serverga jo'natish kerak bo'ladi, bu bizning HASH'imiz
+                // 
                 return
             }
             RESULT_ERROR -> return
