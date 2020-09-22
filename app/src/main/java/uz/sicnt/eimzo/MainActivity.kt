@@ -101,6 +101,8 @@ class MainActivity : AppCompatActivity() {
                 //  Ваш готовый подписанный PKCS7. Готов к отправке
                 val pkcs = data?.getByteArrayExtra(EXTRA_RESULT_PKCS7) //  ByteArray
                 val pkcsString = Base64.encodeToString(pkcs, Base64.NO_WRAP)    //  String
+
+                // shu yerdagi pkcsString serverga jo'natish kerak bo'ladi, bu bizning HASH'imiz
                 return
             }
             RESULT_ERROR -> return
